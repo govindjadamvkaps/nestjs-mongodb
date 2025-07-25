@@ -38,4 +38,33 @@ export class StudentService {
       };
     }
   }
+
+  async getAllStudents(): Promise<{
+    success: boolean;
+    data?: StudentDocument[];
+    message: string;
+    error?: string | null;
+  }> {
+    try {
+      const students = await this.studentModel.find().exec();
+      return {
+        success: true,
+        data: students,
+        message: 'Students retrieved successfully',
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        return {
+          success: false,
+          message: 'Error retrieving students',
+          error: error.message || 'Unknown error',
+        };
+      }
+      return {
+        success: false,
+        message: 'Error retrieving students',
+        error: (error as Error).message || 'Unknown error',
+      };
+    }
+  }
 }
